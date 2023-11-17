@@ -2,8 +2,8 @@ import { Router, Request, Response } from 'express';
 
 const router = Router();
 
-router.get('/', (request: Request, response: Response) => {
-  throw new Error('Error message test');
+router.get('/teste', (request: Request, response: Response) => {
+    return response.json({ message: 'Hello World' });
 });
 
 export { router }
