@@ -28,9 +28,11 @@ export function isAuthenticated(
 
     try {
         const { sub } = verify(token, jwtSecret) as Payload;
+        // Recuperar informações do usuário
+        request.user_id = sub;
   
         return next();
-        
+
     } catch (err) {
         return response.status(401).end();
     }
