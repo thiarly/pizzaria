@@ -7,19 +7,26 @@ class CreateProductController{
     async handle(request: Request, response: Response){
         const { name, price, description, category_id } = request.body;
 
-        let banner = "";
 
         const createProductService = new CreateProductService();
 
-        const product = await createProductService.execute({
-            name,
-            price,
-            description,
-            banner,
-            category_id
-        });
+        if(!request.file){
+            throw new Error("Banner is required");
+        }else{
+
+            const { filename } = request.file;
+            console.log(filename);
+
+            const product = await createProductService.execute({
+                name,
+                price,
+                description,
+                banner: '',
+                category_id
+            });
 
         return response.json(product);
+        }
     }
 }
 export { CreateProductController };
