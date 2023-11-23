@@ -13,7 +13,7 @@ export default function Home() {
     <Head>
       <title>TC Pizzaria - Faça seu login</title>
     </Head>
-    <div className={styles.container}>
+    <div className={styles.containerCenter}>
       <Image src={logoImg} alt="TC Pizzaria" />
 
       <div className={styles.login}>
@@ -33,6 +33,7 @@ export default function Home() {
             Acessar
           </Button>
         </form>
+        <a className={styles.text}> Não possui uma conta? Cadastre-se</a>
 
       </div>
     </div>
