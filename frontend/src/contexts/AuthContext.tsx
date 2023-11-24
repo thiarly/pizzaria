@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useState } from 'react';
 
-import { destroyCookie } from 'nookies';
+import { api } from '../services/apiClient';
+
+import { destroyCookie, setCookie, parseCookies } from 'nookies';
 // import Router
 
 import Router from 'next/router';
@@ -38,16 +40,38 @@ export function signOut(){
         console.log('Erro ao deslogar')
     }
 
-
 }
-
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<UserProps>();
     const isAuthenticated = !!user;
 
     async function signIn({ email, password }: SignInProps) {
-        console.log('Dados enviados', email, password)
+        try{
+            const response = await api.post('/session', {
+                email,
+                password
+            });
+
+            const { id, name, token } = response.data;
+
+            setCookie(undefined, '@tcpizza.token', token, {
+                maxAge: 60 * 60 * 24 * 30, // 30 days
+                path: '/'
+            });
+
+            setUser({
+                id,
+                name,
+                email
+            });
+
+            api.defaults.headers['Authorization'] = `Bearer ${token}`;
+            Router.push('/dashboard');
+
+        }catch(error){
+            console.log(error)
+        }
     }
 
     return (
