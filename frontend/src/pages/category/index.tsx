@@ -3,12 +3,30 @@ import Head from 'next/head';
 import { Header } from "../../components/Header"
 import styles from './styles.module.scss'
 
+import { setupAPIClient } from '../../services/api';
+import { Toast } from 'react-toastify/dist/components';
+import { toast } from 'react-toastify';
+
 export default function Category() {
     const [name, setName] = useState('');
 
     async function handleRegister(event: FormEvent){
         event.preventDefault();
-        alert("Categeoria cadastrada com sucesso" + name)
+        
+        if(name === ''){
+            toast.warning('Preencha todos os campos');
+            return;
+        }
+
+        const apiClient = setupAPIClient();
+        await apiClient.post('/category', {
+            name: name
+        }).then((response) => {
+            toast.success('Categoria cadastrada com sucesso');
+            setName('');
+        }).catch((error) => {
+            toast.error('Erro ao cadastrar categoria');
+        });
     }
     return (
         <>
