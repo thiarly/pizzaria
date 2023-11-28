@@ -96,7 +96,7 @@ export default function Dashboard({orders}: HomeProps) {
                 </button>
                 </section>
                     
-                ))}
+            ))}
 
             </article>
         </main>
