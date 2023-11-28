@@ -125,15 +125,14 @@ export default function Dashboard({orders}: HomeProps) {
 
             </article>
         </main>
-            { modalVisible && (
+        {modalVisible && modalItem && (
             <ModalOrder
                 isOpen={modalVisible}
                 onRequestClose={handleCloseModal}
                 order={modalItem}
                 handleFinishOrder={handleFinishItem}
-
             />
-            )}
+        )}
         </div>
         </>
         
@@ -144,8 +143,6 @@ export const getServerSideProps = canSSRAuth(async (context) => {
     const apiClient = setupAPIClient(context);
     
     const response = await apiClient.get('/orders');
-
-    console.log(response.data);
     
     return {
         props: {
