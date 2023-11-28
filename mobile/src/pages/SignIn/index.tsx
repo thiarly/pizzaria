@@ -1,3 +1,4 @@
+import { useState } from "react";
 import React from "react";
 import { 
     View,
@@ -8,7 +9,22 @@ import {
     TouchableOpacity,
  } from "react-native";
 
+
+
 export default function SignIn() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    function handleLogin() {
+
+        if(email === "" || password === "") {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        alert("Email: " + email + "\nSenha: " + password);
+    }
+
     return (
     <View style={styles.container}>
         <Image
@@ -20,15 +36,19 @@ export default function SignIn() {
                 placeholder="Digite seu email"
                 style={styles.input}
                 placeholderTextColor="#F0F0F0"
+                value={email}
+                onChangeText={setEmail}
             />
             <TextInput
                 placeholder="Digite sua senha"
                 style={styles.input}
                 placeholderTextColor="#F0F0F0"
                 secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword}
             />
             
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Acessar</Text>
             </TouchableOpacity>
 
