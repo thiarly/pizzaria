@@ -5,6 +5,8 @@ import { Header } from "../../components/Header"
 import styles from './styles.module.scss'
 import { FiRefreshCcw } from "react-icons/fi"
 import { setupAPIClient } from "../../services/api"
+import Modal from "react-modal"
+import { ModalOrder } from "../../components/ModalOrder"
 
 interface OrderProps {
     id: number;
@@ -18,14 +20,55 @@ interface HomeProps {
     orders: OrderProps[];
 }
 
+export type OrderItemProps = {
+    id: string | number;
+    amount: number;
+    order_id: string | number;
+    product_id: string | number;
+    product: {
+        id: string | number;
+        name: string;
+        description: string;
+        price: number;
+        banner: string;
+        created_at: string;
+        updated_at: string;
+    }
+    order:{
+        id: string | number;
+        table: string | number;
+        status: boolean;
+        name: string | null;
+        created_at: string;
+        updated_at: string;
+    
+    }
+}
+
 export default function Dashboard({orders}: HomeProps) {
 
     const [ordersList, setOrdersList] = useState(orders || []);
+    const [modalItem, setModalItem] = useState<OrderItemProps[]>();
+    const [modalVisible, setModalVisible] = useState(false);
 
-    function handleOpenModalView(id: string | number){
-        console.log('abrir modal');
-        alert('abrir modal' + id);
+    function handleCloseModal(){
+        setModalVisible(false);
     }
+
+    async function handleOpenModalView(id: string | number){
+        const apiClient = setupAPIClient();
+
+        const response = await apiClient.get('/order/detail', {
+            params: {
+                order_id: id,
+            }    
+        });
+
+        setModalItem(response.data);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('#__next');
 
     return (
         <>
@@ -57,6 +100,11 @@ export default function Dashboard({orders}: HomeProps) {
 
             </article>
         </main>
+            { modalVisible && (
+            <ModalOrder
+
+            />
+            )}
         </div>
         </>
         

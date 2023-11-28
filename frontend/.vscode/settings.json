@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "abrir",
         "cadastrado",
         "cadastrar",
         "Cadastrar",
@@ -8,6 +9,7 @@
         "Descrição",
         "Erro",
         "Página",
+        "pedidos",
         "Pizzaria",
         "Preço",
         "Preencha",
@@ -15,6 +17,7 @@
         "Produto",
         "sucesso",
         "toastify",
-        "todos"
+        "todos",
+        "Últimos"
     ]
 }
