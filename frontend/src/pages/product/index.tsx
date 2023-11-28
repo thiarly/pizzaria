@@ -5,14 +5,28 @@ import { canSSRAuth } from '../../utils/canSSRAuth';
 
 import styles from './styles.module.scss'
 
-import toast from 'react-toastify';
-
 import { FiUpload } from 'react-icons/fi';
 
-export default function Product() {
+import { setupAPIClient } from '../../services/api';
+
+type ItemProps = {
+    id: number;
+    name: string;
+}
+
+interface CategoryProps {
+    categoryList: ItemProps[];
+}
+
+export default function Product({categoryList}: CategoryProps) {
+
+    console.log(categoryList);
 
     const [avatarUrl, setAvatarUrl] = useState('');
     const [imageAvatar, setImageAvatar] = useState<File | null>(null);
+
+    const [categories , setCategories] = useState(categoryList || []);
+    const [categoriesSelected, setCategoriesSelected] = useState(0);
 
     function handleFile(event: ChangeEvent<HTMLInputElement>){
         if(!event.target.files){
@@ -31,6 +45,11 @@ export default function Product() {
            return;
        }
 
+    }
+
+    function handleChangeCategory(event: ChangeEvent<HTMLSelectElement>){
+        const category = event.target.value;
+        setCategoriesSelected(Number(category));
     }
 
     return (
@@ -64,9 +83,14 @@ export default function Product() {
         
                     </label>
 
-                    <select aria-label="Categoria do produto">
-                        <option>Pizza</option>
-                        <option>Bebida</option>
+                    <select aria-label="Categoria do produto" value={categoriesSelected} onChange={handleChangeCategory}>
+                        {categories.map((item, index) => {
+                            return (
+                                <option key={item.id} value={index}>
+                                    {item.name}
+                                </option>
+                            )
+                        })}
                     </select>
 
                     <input 
@@ -98,7 +122,15 @@ export default function Product() {
     }
 
 export const getServerSideProps = canSSRAuth(async (context) => {
+    const apiClient = setupAPIClient(context);
+
+    const response = await apiClient.get('/category');
+    
+
+
     return {
-        props: {}
+        props: {
+            categoryList: response.data
+        }
     }
 })
