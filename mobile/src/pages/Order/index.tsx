@@ -33,7 +33,7 @@ type ProductProps ={
 }
 
 type ItemProps = {
-    id: number;
+    id: number | string;
     product_id: string | number;
     name: string;
     amount: string | number;
@@ -130,6 +130,21 @@ export default function Order() {
 
         setItem(oldArray => [...oldArray, data])
     }
+    
+    async function handleDeleteItem(item_id: string) {
+        await api.delete('/order/remove', {
+            params: {
+                item_id: item_id,
+            }
+        });
+
+        let removeItem = item.filter((item) => {
+            return (item.id !== item_id);
+        });
+
+        setItem(removeItem);
+        
+    }
 
     return (
         <View style={styles.container}>
@@ -194,7 +209,7 @@ export default function Order() {
                 style={{flex: 1, marginTop: 24}}
                 data={item}
                 keyExtractor={(item) => String(item.id)}
-                renderItem={({item}) => <ListItem data={item} /> }
+                renderItem={({item}) => <ListItem data={item} deleteItem={handleDeleteItem} /> }
             >
 
             </FlatList>
