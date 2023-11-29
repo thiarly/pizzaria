@@ -27,7 +27,7 @@ export default function Dashboard() {
             alert("Informe o número da mesa!");
             return;
         }
-        navigation.navigate("Order", { number: mesa, order_id: "" });
+        navigation.navigate("Order", { number: mesa, order_id: "7c7e5790-1081-4c5d-b861-c9ec7f8b3c80" });
     }
 
     return (
