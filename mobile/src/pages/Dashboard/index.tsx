@@ -27,7 +27,7 @@ export default function Dashboard() {
             alert("Informe o número da mesa!");
             return;
         }
-        navigation.navigate("Order", { mesa: mesa });
+        navigation.navigate("Order", { number: mesa, order_id: "" });
     }
 
     return (
