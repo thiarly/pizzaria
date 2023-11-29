@@ -3,8 +3,18 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Dashboard from "../pages/Dashboard";
+import Order from "../pages/Order";
 
-const Stack = createNativeStackNavigator();
+export type StackPramsList = {
+    Dashboard: undefined;
+    Order: {
+        number: string | undefined;
+        order_id: string | undefined;
+    };
+}
+
+
+const Stack = createNativeStackNavigator<StackPramsList>();
 
 function AppRoutes() {
     return (
@@ -14,6 +24,11 @@ function AppRoutes() {
              component={Dashboard} 
             options={{headerShown: false}}
              />
+            <Stack.Screen
+                name="Order" 
+                component={Order}
+                options={{headerShown: false}}
+            />
         </Stack.Navigator>
     );
 }

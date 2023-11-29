@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import { 
     View, 
     Text, 
@@ -10,10 +10,25 @@ import {
     Image,
 } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 import { AuthContext } from "../../contexts/AuthContext";
 
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackPramsList } from "../../routes/app.routes";
+
 export default function Dashboard() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
+    const [mesa, setMesa] = useState("");
     const { signOut } = useContext(AuthContext);
+
+    function openOrder() {
+        if(mesa === "") {
+            alert("Informe o número da mesa!");
+            return;
+        }
+        navigation.navigate("Order", { mesa: mesa });
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -30,9 +45,10 @@ export default function Dashboard() {
                     placeholderTextColor="#F0F0F0"
                     style={styles.input}
                     keyboardType="numeric"
+                    onChangeText={setMesa}
                 />
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={openOrder}>
                     <Text style={styles.buttonText}>Abrir mesa</Text>
                 </TouchableOpacity>
             </View>
