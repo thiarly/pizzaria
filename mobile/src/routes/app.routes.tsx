@@ -14,6 +14,7 @@ export type StackPramsList = {
 }
 
 
+
 const Stack = createNativeStackNavigator<StackPramsList>();
 
 function AppRoutes() {

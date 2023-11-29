@@ -10,7 +10,7 @@ import {
     Image,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -49,11 +49,12 @@ export default function Dashboard() {
             <View style={styles.content}>
                 <Text style={styles.title}>Novo Pedido</Text>
                 <TextInput
-                    placeholder="Nome da mesa"
+                    placeholder="Número da mesa"
                     placeholderTextColor="#F0F0F0"
                     style={styles.input}
                     keyboardType="numeric"
                     onChangeText={setNumber}
+                    value={number}
                 />
 
                 <TouchableOpacity style={styles.button} onPress={openOrder}>

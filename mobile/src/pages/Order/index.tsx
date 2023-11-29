@@ -1,14 +1,20 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import React, {useEffect, useState} from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { api } from "../../services/api";
+import { ModalPicker } from "../../components/ModalPicker";
 
-type RouteDetailParams ={
+export type RouteDetailParams ={
     Order: {
         number: string | number;
         order_id: string | number;
     };
+}
+
+export type CategoryProps ={
+    id: number;
+    name: string;
 }
 
 type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
@@ -16,6 +22,26 @@ type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
 export default function Order() {
     const route = useRoute<OrderRouteProps>();
     const navigation = useNavigation();
+
+    const [category, setCategory] = useState<CategoryProps[] | []> ([]);
+    const [categorySelected, setCategorySelected] = useState<CategoryProps>();
+    const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
+
+    const [amount, setAmount] = useState('1');
+
+    useEffect(() => {
+        async function loadCategories() {
+            try{
+                const response = await api.get('/category');
+                setCategory(response.data);
+                setCategorySelected(response.data[0]);
+            }catch(err){
+                console.log(err);
+            }
+        }
+        loadCategories();
+    }, []);
+
 
     async function handleCloseOrder() {
         try{
@@ -25,11 +51,17 @@ export default function Order() {
             }
         })
             
-            navigation.goBack();
+       navigation.goBack();
+
 
         }catch(err){
             console.log(err);
         }
+    }
+
+    function handleChangeCategory(item: CategoryProps) {
+        setCategorySelected(item);
+        setModalCategoryVisible(false);
     }
 
     return (
@@ -41,11 +73,19 @@ export default function Order() {
                 </TouchableOpacity>
             </View>
 
+            {category.length !== 0 && (
+                <TouchableOpacity style={styles.input} onPress={() => setModalCategoryVisible(true) }>
+                <Text style={{ color: '#FFF'}}>
+                    {categorySelected?.name}
+                </Text>
+                </TouchableOpacity>
+            )}
+
+
             <TouchableOpacity style={styles.input}>
-                <Text style={{ color: '#FFF'}}>Pizzas</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.input}>
-                <Text style={{ color: '#FFF'}}>Pizza de calabresa</Text>
+                <Text style={{ color: '#FFF'}}>
+                    Pizza de calabresa
+                </Text>
             </TouchableOpacity>
 
             <View style={styles.qtdContainer}>
@@ -54,7 +94,8 @@ export default function Order() {
                     placeholder="1"
                     placeholderTextColor="#F0F0F0"
                     keyboardType="numeric"
-                    value="1"
+                    value={String(amount)}
+                    onChangeText={setAmount}
                     style={[styles.input, {width: "60%", textAlign: "center", height: "90%", marginTop: 10} ]}
                 />
 
@@ -71,6 +112,20 @@ export default function Order() {
                     </TouchableOpacity>
 
             </View>
+
+            <Modal
+                transparent={true}
+                visible={modalCategoryVisible}
+                animationType="fade"
+            >
+                <ModalPicker
+                    handleCloseModal={() => setModalCategoryVisible(false)}
+                    options={category}
+                    selectedItem={handleChangeCategory}
+                />
+            </Modal>
+            
+
         </View>
     );
 }
