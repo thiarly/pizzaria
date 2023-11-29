@@ -22,12 +22,12 @@ export type RouteDetailParams ={
 }
 
 export type CategoryProps ={
-    id: number;
+    id: number | string;
     name: string;
 }
 
 type ProductProps ={
-    id: number;
+    id: number | string;
     name: string;
 
 }
@@ -114,17 +114,34 @@ export default function Order() {
         setModalProductVisible(false);
     }
 
-    function handleAddItem() {
-        alert("Adicionado");
+    async function handleAddItem() {
+        const response = await api.post('/order/add', {
+            order_id: route.params?.order_id,
+            product_id: productSelected?.id,
+            amount: Number(amount),
+        });
+
+        let data ={
+            id: response.data.id,
+            product_id: productSelected?.id as string,
+            name: productSelected?.name as string,
+            amount: Number(amount),
+        }
+
+        setItem(oldArray => [...oldArray, data])
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>Mesa: {route.params.number}</Text>
-                <TouchableOpacity onPress={handleCloseOrder}>
-                    <Feather name="trash-2" size={25} color="#FF3F4b" />
-                </TouchableOpacity>
+
+                {item.length === 0 && (
+                    <TouchableOpacity onPress={handleCloseOrder}>
+                        <Feather name="trash-2" size={25} color="#FF3F4b" />
+                    </TouchableOpacity>    
+                )}
+
             </View>
 
             {category.length !== 0 && (
