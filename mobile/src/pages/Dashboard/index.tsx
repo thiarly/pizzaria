@@ -17,17 +17,25 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackPramsList } from "../../routes/app.routes";
 
+import { api } from "../../services/api";
+
 export default function Dashboard() {
     const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
-    const [mesa, setMesa] = useState("");
+    const [number, setNumber] = useState("");
     const { signOut } = useContext(AuthContext);
 
-    function openOrder() {
-        if(mesa === "") {
+    async function openOrder() {
+        if(number === "") {
             alert("Informe o número da mesa!");
             return;
         }
-        navigation.navigate("Order", { number: mesa, order_id: "7c7e5790-1081-4c5d-b861-c9ec7f8b3c80" });
+
+        const response = await api.post("/order", {
+            table: Number(number)
+        });
+
+        navigation.navigate("Order", { number: number, order_id: response.data.id });
+        setNumber("");
     }
 
     return (
@@ -45,7 +53,7 @@ export default function Dashboard() {
                     placeholderTextColor="#F0F0F0"
                     style={styles.input}
                     keyboardType="numeric"
-                    onChangeText={setMesa}
+                    onChangeText={setNumber}
                 />
 
                 <TouchableOpacity style={styles.button} onPress={openOrder}>
