@@ -1,9 +1,18 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from "react-native";
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    TextInput, 
+    Modal,
+    FlatList,
+} from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { api } from "../../services/api";
 import { ModalPicker } from "../../components/ModalPicker";
+import { ListItem } from "../../components/ListItem";
 
 export type RouteDetailParams ={
     Order: {
@@ -23,6 +32,13 @@ type ProductProps ={
 
 }
 
+type ItemProps = {
+    id: number;
+    product_id: string | number;
+    name: string;
+    amount: string | number;
+}
+
 type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
 
 export default function Order() {
@@ -38,6 +54,7 @@ export default function Order() {
     const [modalProductVisible, setModalProductVisible] = useState(false);
 
     const [amount, setAmount] = useState('1');
+    const [item, setItem] = useState<ItemProps[]>([]);
 
     useEffect(() => {
         async function loadCategories() {
@@ -97,6 +114,10 @@ export default function Order() {
         setModalProductVisible(false);
     }
 
+    function handleAddItem() {
+        alert("Adicionado");
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -137,15 +158,29 @@ export default function Order() {
 
             <View style={styles.actions}>
                     
-                    <TouchableOpacity style={styles.buttonAdd}>
+                    <TouchableOpacity style={styles.buttonAdd} onPress={handleAddItem}>
                         <Text style={styles.buttonText}>+</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity 
+                        style={[styles.button, {opacity: item.length === 0 ? 0.3 : 1}]}
+                        disabled={item.length === 0}
+
+                    >
                         <Text style={styles.buttonText}>Avançar</Text>
                     </TouchableOpacity>
 
             </View>
+
+            <FlatList
+                showsHorizontalScrollIndicator={false}
+                style={{flex: 1, marginTop: 24}}
+                data={item}
+                keyExtractor={(item) => String(item.id)}
+                renderItem={({item}) => <ListItem data={item} /> }
+            >
+
+            </FlatList>
 
             <Modal
                 transparent={true}
