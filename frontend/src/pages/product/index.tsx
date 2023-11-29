@@ -124,10 +124,12 @@ export default function Product({categoryList}: CategoryProps) {
         
                     </label>
 
-                    <select aria-label="Categoria do produto" value={categoriesSelected} onChange={handleChangeCategory}>
+                    <select 
+                    aria-label="Categoria do produto" 
+                    value={categoriesSelected} onChange={handleChangeCategory}>
                         {categories.map((item, index) => {
                             return (
-                                <option key={item.id} value={index}>
+                                <option key={item.name} value={index}>
                                     {item.name}
                                 </option>
                             )
@@ -171,7 +173,7 @@ export default function Product({categoryList}: CategoryProps) {
 export const getServerSideProps = canSSRAuth(async (context) => {
     const apiClient = setupAPIClient(context);
 
-    const response = await apiClient.get('category/product');
+    const response = await apiClient.get('category');
     
     return {
         props: {
