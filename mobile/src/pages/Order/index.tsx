@@ -43,6 +43,18 @@ export default function Order() {
                 />
 
             </View>
+
+            <View style={styles.actions}>
+                    
+                    <TouchableOpacity style={styles.buttonAdd}>
+                        <Text style={styles.buttonText}>+</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Avançar</Text>
+                    </TouchableOpacity>
+
+            </View>
         </View>
     );
 }
@@ -83,11 +95,39 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        marginBottom: 15,
     },
     qtdText:{
         fontSize: 20,
         fontWeight: "bold",
         color: "#fff",
     },
+    actions:{
+        flexDirection: "row",
+        width: "100%",
+        justifyContent: "space-between",
+    },
+    buttonAdd:{
+        backgroundColor: "#3fd1ff",
+        borderRadius: 4,
+        width: "20%",
+        height: 40,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    ButtonText:{
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#101026",
+    },
+    button:{
+        backgroundColor: "#3fffa3",
+        borderRadius: 4,
+        width: "75%",
+        height: 40,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
 
 });
