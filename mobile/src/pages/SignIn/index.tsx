@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import React from "react";
 import { 
     View,
@@ -10,8 +10,12 @@ import {
  } from "react-native";
 
 
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function SignIn() {
+
+    const { user } = useContext(AuthContext);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
