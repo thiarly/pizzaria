@@ -6,6 +6,10 @@ import { Feather } from "@expo/vector-icons";
 
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 
+import { api } from "../../services/api";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackPramsList } from "../../routes/app.routes";
+
 type RouteDetailParams = {
     FinishOrder: {
         order_id: string | number;
@@ -15,11 +19,23 @@ type RouteDetailParams = {
 
 type FinishOrderRouteProps = RouteProp<RouteDetailParams, "FinishOrder">;
 
+
+
 export function FinishOrder(){
     const route = useRoute<FinishOrderRouteProps>();
+    const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
 
     async function handleFinish() {
-        alert("Pedido finalizado com sucesso!");
+        try{
+            await api.put('/order/send',{
+                order_id: route.params?.order_id,
+            })
+            alert("Pedido enviado com sucesso!");
+            navigation.popToTop();
+
+        }catch(error){
+            console.log("Erro ao finalizar, tente mais tarde",error);
+        }
     }
 
     return(
