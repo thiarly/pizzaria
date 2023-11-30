@@ -13,7 +13,8 @@ export type StackPramsList = {
         order_id: string | undefined;
     };
     FinishOrder: {
-        order_id: string | undefined;
+        order_id: string | number | undefined;
+        number: number | string | undefined;
     };
 }
 
